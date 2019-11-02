@@ -1,7 +1,7 @@
 # Introduction
 This repositoy is part of the experimental code for the paper [^1], [^2].
 
-This experiment setup is built upon Intel Pin [^3].
+This experiment setup is built upon [Intel Pin] [3].
 
 ## Layout of direcotry
 - basicAllocator: 
@@ -89,8 +89,7 @@ You should implement an allocator. Given a pair-wise graph, the allocator partit
 ## Reference
 [^1]: Qing'an Li, Jianhua Li, Liang Shi, Chun Jason Xue, Yiran Chen, Yanxiang He: Compiler-assisted refresh minimization for volatile STT-RAM cache. ASP-DAC 2013: 273-278
 
-[^2]: Qing'an Li, Yanxiang He, Jianhua Li, Liang Shi, Yiran Chen, Chun Jason Xue:
-Compiler-Assisted Refresh Minimization for Volatile STT-RAM Cache. IEEE Trans. Computers 64(8): 2169-2181 (2015)
+[^2]: Qing'an Li, Yanxiang He, Jianhua Li, Liang Shi, Yiran Chen, Chun Jason Xue: Compiler-Assisted Refresh Minimization for Volatile STT-RAM Cache. IEEE Trans. Computers 64(8): 2169-2181 (2015)
 
-[^3]: https://software.intel.com/en-us/articles/pin-a-binary-instrumentation-tool-downloads
+[3]: https://software.intel.com/en-us/articles/pin-a-binary-instrumentation-tool-downloads
 
