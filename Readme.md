@@ -1,12 +1,12 @@
 # Introduction
-This repositoy is part of the experimental code for the paper[1].
+This repositoy is part of the experimental code for the paper[^1],[^2].
 
-This experiment setup is built upon Intel Pin[2].
+This experiment setup is built upon Intel Pin[^3]
 
 ## Layout of direcotry
 - basicAllocator: 
 	
-	this is an example allocator with heuristic optimization (refer to [1]).
+	this is an example allocator with heuristic optimization in the paper.
 	
 - myAllocator: 
 	
@@ -49,15 +49,6 @@ This experiment setup is built upon Intel Pin[2].
 
 
 
-
-
-The layout of the direcotry includes:
-
-Reference:
-[1] Li Q, He Y, Li J, et al. Compiler-assisted refresh minimization for volatile STT-RAM cache[J]. IEEE Transactions on Computers, 2015, 64(8): 2169-2181.
-[2] https://software.intel.com/en-us/articles/pin-a-binary-instrumentation-tool-downloads
-
-
 # How to propose a new allocator
 ## Notes
 You should implement an allocator. Given a pair-wise graph, the allocator partition vertices of the graph into different groups, with regarding to:
@@ -73,7 +64,7 @@ You should implement an allocator. Given a pair-wise graph, the allocator partit
 3. Create a link file "pintools", which links to PinLibDir/source/tools/pintools, in the root directory. This will helps both building pintools and using pintools for simulation.
 4. Run "./init", to build the powerstone benchmark, to build the pin tools, and  for each benchmark program, it can
 	- output X.trace: the trace of runnning X
-	- output X.graph: the pair-wise graph relating data writes for X (see Ref[1])
+	- output X.graph: the pair-wise graph relating data writes for X (see Ref[^1])
 5. Run "./run.sh ori", which invokes the cache simulator (a.trace & a null alloc -> a.ori.stats ) to evaluate the performance statistics of the original gcc generated data layout. For each benchmark program X, it:
 	- input X.trace: 
 	- output X.ori.stats: performance statistics
@@ -94,4 +85,12 @@ You should implement an allocator. Given a pair-wise graph, the allocator partit
 ./result.sh "Total refresh"
 ./result.sh "Total cycles".
 ```
+
+## Reference
+[^1]: Qing'an Li, Jianhua Li, Liang Shi, Chun Jason Xue, Yiran Chen, Yanxiang He: Compiler-assisted refresh minimization for volatile STT-RAM cache. ASP-DAC 2013: 273-278
+
+[^2]: Qing'an Li, Yanxiang He, Jianhua Li, Liang Shi, Yiran Chen, Chun Jason Xue:
+Compiler-Assisted Refresh Minimization for Volatile STT-RAM Cache. IEEE Trans. Computers 64(8): 2169-2181 (2015)
+
+[^3]: https://software.intel.com/en-us/articles/pin-a-binary-instrumentation-tool-downloads
 
