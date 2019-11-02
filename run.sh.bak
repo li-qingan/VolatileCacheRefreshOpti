@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Compile allocate.cpp
+ALLOCATOR="./myallocate"
+echo "Building $ALLOCATOR..."
+echo "g++ -o $ALLOCATOR myallocate.cpp"
+g++ -o $ALLOCATOR myallocate.cpp
+
+echo ""
+
+# Compile bechmarks
+echo 'Building benchmarks...'
+echo 'cd ./powerstone && make && cd ..'
+cd ./powerstone && make && cd ..
+
+echo ""
+
+# Compile pintools
+echo 'Building pin tools'
+echo 'export PIN_ROOT=$(pwd)/pin-3.6-97554-g31f0a167d-gcc-linux'
+export PIN_ROOT=$(pwd)/pin-3.6-97554-g31f0a167d-gcc-linux
+echo 'export PATH=$PIN_ROOT:$PATH'
+export PATH=$PIN_ROOT:$PATH
+echo 'cd ./pintools && make && cd ..'
+cd ./pintools && make && cd ..
+
+echo ""
+
+SYMBOL_TRACER="./pintools/obj-intel64/SymbolTracer.so"
+BASE_ESTIMATOR="./pintools/obj-intel64/BaseEstimator.so"
+OPTI_ESTIMATOR="./pintools/obj-intel64/OptiEstimator.so"
+BENCHMARKS_DIR="./powerstone"
+BENCHMARKS=("adpcm" "bcnt" "blit" "crc" "engine" "fir" "g3fax" "pocsag" "qurt" "ucbqsort")
+OUTPUT_DIR="./output"
+
+echo "mkdir -p $OUTPUT_DIR"
+mkdir -p $OUTPUT_DIR
+
+# evaluating on each benchmark
+for BENCHMARK in ${BENCHMARKS[@]}
+do
+    echo "Evaluating on $BENCHMARK..."
+    BENCH_OUTDIR=$OUTPUT_DIR/$BENCHMARK
+    echo "mkdir -p $BENCH_OUTDIR"
+    mkdir -p $BENCH_OUTDIR
+
+    TRACE_FILE=$BENCH_OUTDIR/$BENCHMARK.trace
+    GRAPH_FILE=$BENCH_OUTDIR/$BENCHMARK.graph
+    PARTITIONED_GRAPH_FILE=$BENCH_OUTDIR/$BENCHMARK.alloc
+    STATS_FILE=$BENCH_OUTDIR/$BENCHMARK.stats
+    OPTI_STATS_FILE=$BENCH_OUTDIR/$BENCHMARK_opti.stats
+    BENCHMARK_FILE=$BENCHMARKS_DIR/$BENCHMARK
+
+    # collect trace information
+    echo "Collecting trace information..."
+    echo "pin -t $SYMBOL_TRACER -o $TRACE_FILE -- $BENCHMARK_FILE"
+    pin -t $SYMBOL_TRACER -o $TRACE_FILE -- $BENCHMARK_FILE
+    echo ""
+
+    # generate graph and stats information using symbol_trace_tool
+    echo "Generating graph and base stats information..."
+    echo "pin -t $BASE_ESTIMATOR -it $TRACE_FILE -o $STATS_FILE -og $GRAPH_FILE -- $BENCHMARK_FILE"
+    pin -t $BASE_ESTIMATOR -it $TRACE_FILE -o $STATS_FILE -og $GRAPH_FILE -- $BENCHMARK_FILE
+    echo ""
+
+    # graph partitioning
+    echo "Partitioning graph..."
+    echo "$ALLOCATOR $GRAPH_FILE"
+    $ALLOCATOR $GRAPH_FILE
+    echo ""
+
+    # evaluate on the data layout re-arrganged program
+    echo "Evaluate on the data layout re-arrganged program..."
+    echo "pin -t OPTI_ESTIMATOR -it $TRACE_FILE -o $OPTI_STATS_FILE -id $PARTITIONED_GRAPH_FILE  -- $BENCHMARK_FILE" 
+    pin -t $OPTI_ESTIMATOR -it $TRACE_FILE -o $OPTI_STATS_FILE -id $PARTITIONED_GRAPH_FILE  -- $BENCHMARK_FILE
+    echo ""
+done
+
+

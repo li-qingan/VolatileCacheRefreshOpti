@@ -1,0 +1,10 @@
+* Problem: Graph partitioning for re-arranging program data layout
+* Description: Refresh schemes have been proposed to avoid data losses for Spin-transfer torque RAM (STT-RAM) on-chip caches. However, refresh operations consume additional energy and overhead. In this problem, you will re-arrange program data layout by applying an allocation function to allocate data objects into memory blocks, such that the number of required refresh operations is minimized. A graph representation can be employed here, where a vertex represents a data object and an edge connecting two vertices represents the cost of assigning the two related data objects into the same block. Thus the target problem is transformed to partitioning the graph into its vertex-induced sub-graphs, where each sub-graph corresponds to a block, such that the total cost of all sub-graphs is minimized.
+In this problem, we will provide you:
+1. A pin-based memory trace tool that is used to collect the memory trace for a running program; 
+2. A pin-based cache simulator that accepts a memory trace file and outputs the evaluation statics for unoptimized program, along with the data objects' graph; 
+3. A pin-based cache simulator that accepts a memory trace file and a partitioned graph file, and outputs the evaluation static for optimized program. 
+4. Additionally, a graph partitioning example is provided using the heuristic algorithm in Ref.[2]. You need to implement your own graph partitioning algorithm and generate a partitioned graph file in the same format as the given example. 
+
+[2] Li Q, He Y, Li J, et al. Compiler-assisted refresh minimization for volatile STT-RAM cache[J]. IEEE Transactions on Computers, 2015, 64(8): 2169-2181.
+
