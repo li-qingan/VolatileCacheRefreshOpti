@@ -1,7 +1,7 @@
 # Introduction
-This repositoy is part of the experimental code for the paper[^1],[^2].
+This repositoy is part of the experimental code for the paper [^1], [^2].
 
-This experiment setup is built upon Intel Pin[^3]
+This experiment setup is built upon Intel Pin [^3].
 
 ## Layout of direcotry
 - basicAllocator: 
